@@ -3,7 +3,7 @@
 // Author      : Ekaterina Stamatova
 // Version     :
 // Copyright   : Your copyright notice
-// Description : Curse project in C++, Ansi-style
+// Description : Course project in C++, Ansi-style
 //============================================================================
 
 #include <cstdlib>
@@ -111,12 +111,11 @@ Textbook::~Textbook() {
 }
 ;
 
-class Publisher {
+class Distributor {
 private:
 	string name;
 	string address;
 	string phone;
-	vector<Textbook> textbooks;
 
 public:
 	const string& getAddress() const;
@@ -125,22 +124,19 @@ public:
 	void setName(const string& name);
 	const string& getPhone() const;
 	void setPhone(const string& phone);
-	const vector<Textbook>& getTextbooks() const;
-	void setTextbooks(const vector<Textbook>& textbooks);
-	Publisher(string name, string address, string phone);
-	~Publisher();
+	Distributor(string name, string address, string phone);
+	~Distributor();
 };
 
-Publisher::Publisher(string name, string address, string phone) {
+Distributor::Distributor(string name, string address, string phone) {
 	setName(name);
 	setAddress(address);
 	setPhone(phone);
 }
 ;
 
-Publisher::~Publisher() {
-}
-;
+Distributor::~Distributor() {
+};
 
 int Date::getDay() const {
 	return day;
@@ -238,36 +234,27 @@ void Textbook::setPrice(float price) {
 	this->price = price;
 }
 
-const string& Publisher::getAddress() const {
+const string& Distributor::getAddress() const {
 	return address;
 }
 
-void Publisher::setAddress(const string& address) {
+void Distributor::setAddress(const string& address) {
 	this->address = address;
 }
 
-const string& Publisher::getName() const {
+const string& Distributor::getName() const {
 	return name;
 }
 
-void Publisher::setName(const string& name) {
+void Distributor::setName(const string& name) {
 	this->name = name;
 }
 
-const string& Publisher::getPhone() const {
+const string& Distributor::getPhone() const {
 	return phone;
 }
 
-const vector<Textbook>& Publisher::getTextbooks() const {
-	return textbooks;
-}
-
-void Publisher::setTextbooks(const vector<Textbook>& textbooks) {
-	this->textbooks = textbooks;
-
-}
-
-void Publisher::setPhone(const string& phone) {
+void Distributor::setPhone(const string& phone) {
 	this->phone = phone;
 }
 
@@ -277,9 +264,10 @@ ostream& operator<<(ostream& out, const Date& d) {
 	return out;
 }
 
-ostream& operator<<(ostream& out, const Publisher& p) {
+ostream& operator<<(ostream& out, const Distributor& p) {
 	//out << '(' << p.get_x() << ',' << p.get_y() << ')';
-	out << p.getName() << "\t" << p.getAddress() << "\t" << p.getPhone();
+	out << "\"" << p.getName() << "\"\t" << p.getAddress() << "\t"
+			<< p.getPhone();
 	return out;
 }
 
@@ -289,12 +277,12 @@ ostream& operator<<(ostream& out, const Textbook& b) {
 		out << b.getTitle() << " by " << b.getAuthor() << " Edition: "
 				<< b.getEdition() << " Issue: " << b.getIssue() << " ISBN: "
 				<< b.getIsbn() << " Approved on " << b.getDateofapproval()
-				<< " Get out of print on " << b.getOutOfPrint() << " Price:"
+				<< " Got out of print on " << b.getOutOfPrint() << " Price:"
 				<< b.getPrice();
 	} else {
 		out << b.getTitle() << " by " << b.getAuthor() << " Edition: "
 				<< b.getEdition() << " Issue: " << b.getIssue() << " ISBN: "
-				<< b.getIsbn() << " Not approved" << " Get out of print on "
+				<< b.getIsbn() << " Not approved" << " Got out of print on "
 				<< b.getOutOfPrint() << " Price:" << b.getPrice();
 
 	}
@@ -325,7 +313,7 @@ bool isValidNumber(string phone) {
 bool isValidDate(int day, int month, int year) {
 
 	bool isAcceptable;
-	if (year > 0) {
+	if (year > 1000) {
 		if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8
 				|| month == 10 || month == 12) {
 			if (day >= 1 && day <= 31) {
@@ -362,23 +350,25 @@ bool isValidPrice(float price) {
 	return price > 0.00;
 }
 
-void addPublisher(vector<Publisher> &publishers) {
+void addDistributor(vector<Distributor> &distributors) {
 
 	string name, addres, phone;
 
 	cin.ignore();
-	cout << "Please enter the name of the publisher: \n";
+	cout << "Please enter the name of the Distributor: \n";
 	getline(cin, name);
-	cout << "Please enter the addres of the publisher: \n";
+	cout << "Please enter the address of the Distributor: \n";
 	getline(cin, addres);
-	cout << "Please enter the phone number of the publisher: \n";
+	cout << "Please enter the phone number of the Distributor: \n";
 	getline(cin, phone);
-	Publisher publisher(name, addres, phone);
-	publishers.push_back(publisher);
+	Distributor distributor(name, addres, phone);
+	distributors.push_back(distributor);
+	cout << "\nDistributor added successfully!\nTotal numbe of distributors: "
+			<< distributors.size() << endl;
 
 }
 
-void addTextbook(vector<Publisher>& publishers) {
+void addTextbook(vector<Textbook>& textbooks) {
 
 	string approval, title, author, dateOfApproval, ISBN, outOfPrintDate;
 	bool app;
@@ -386,19 +376,19 @@ void addTextbook(vector<Publisher>& publishers) {
 	float price;
 
 	cin.ignore();
-	cout << "Please enter the title of the textbook: \n";
+	cout << "\nPlease enter the title of the textbook: \n";
 	getline(cin, title);
-	cout << "Please enter the Author/collective of the textbook: \n";
+	cout << "\nPlease enter the Author/collective of the textbook: \n";
 	getline(cin, author);
-	cout << "Please enter the ISBN of the textbook: \n";
+	cout << "\nPlease enter the ISBN of the textbook: \n";
 	getline(cin, ISBN);
-	cout << "Please enter the edition of the textbook: \n";
+	cout << "\nPlease enter the edition of the textbook: \n";
 	cin >> edition;
-	cout << "Please enter the issue of the textbook: \n";
+	cout << "\nPlease enter the issue of the textbook: \n";
 	cin >> issue;
 
 	do {
-		cout << "Please enter the out of print date in format dd/mm/yyyy"
+		cout << "\nPlease enter the out of print date in format dd/mm/yyyy"
 				<< endl;
 		cin >> outOfPrintDate;
 		exitday = atoi(outOfPrintDate.substr(0, 2).c_str());
@@ -409,21 +399,20 @@ void addTextbook(vector<Publisher>& publishers) {
 
 	do {
 		cout
-				<< "Does the ministry of education approved this textbook? : Yes/No\n";
+				<< "\nHas the ministry of education approved this textbook? : Yes/No\n";
 		cin >> approval;
 	} while (approval.compare("Yes") && approval.compare("No")
 			&& approval.compare("yes") && approval.compare("no"));
 
-	if (!approval.compare("No")) {
+	if (!approval.compare("No") || !approval.compare("no")) {
 		aday = 0;
 		amonth = 0;
 		ayear = 0;
 		app = false;
 	} else {
 		do {
-
 			cout
-					<< "On which date the textbook has been approved : (dd/mm/yyyy))"
+					<< "\nOn which date has the textbook been approved : (dd/mm/yyyy))\n"
 					<< endl;
 			cin >> dateOfApproval;
 			aday = atoi(dateOfApproval.substr(0, 2).c_str());
@@ -435,35 +424,16 @@ void addTextbook(vector<Publisher>& publishers) {
 	}
 
 	do {
-		cout << "Please enter the price of the textbook: " << endl;
+		cout << "\nPlease enter the price of the textbook:\n" << endl;
 		cin >> price;
 	} while (!isValidPrice(price));
 
 	Textbook textbook(app, title, author, aday, amonth, ayear, edition, ISBN,
 			exitday, exitmonth, exityear, issue, price);
 
-	unsigned int i, publ;
-	do {
-
-		cout << "Please choose the publisher of the book: " << endl;
-		cout << "0.Add a new publisher" << endl;
-		for (i = 0; i < publishers.size(); ++i) {
-			cout << publishers[i] << endl;
-		}
-		cout
-				<< "Warning! If you choose to add new publisher the information about the new book will be lost."
-				<< endl;
-		cin >> publ;
-	} while (publ < 0 || publ > publishers.size());
-
-	if (publ == 0) {
-		addPublisher(publishers);
-	} else {
-		vector<Textbook> textbooks = publishers[publ - 1].getTextbooks();
-		textbooks.push_back(textbook);
-		publishers[publ - 1].setTextbooks(textbooks);
-	}
-	cout << "SIZE AFTER ADD" << publishers[0].getTextbooks().size() << endl;
+	textbooks.push_back(textbook);
+	cout << "\nTextbook added successfully!\nTotal number of books: "
+			<< textbooks.size() << endl;
 
 }
 
@@ -477,139 +447,137 @@ void split(const string &s, const char* delim, vector<string> & v) {
 	free(dup);
 }
 
-void buy(vector<Publisher>& publishers) {
+void buy(vector<Distributor>& distributors, vector<Textbook>& textbooks) {
 
 	float sum = 0.0;
-	unsigned int i, publ, book = -1;
+	unsigned int i, j, publ, book;
 	do {
 
-		cout << "Please choose the publisher of the book: " << endl;
-		for (i = 0; i < publishers.size(); ++i) {
-			cout << publishers[i] << endl;
+		cout << "\nPlease choose a Distributor: " << endl;
+		for (i = 0; i < distributors.size(); ++i) {
+			cout << i + 1 << ". " << distributors[i] << endl;
 		}
+		cout << "Choice #: ";
 		cin >> publ;
-	} while (publ < 0 || publ > publishers.size());
+	} while (publ < 0 || publ > distributors.size());
 
-	//Publisher publisher= ;
-	vector<Textbook> textbooks = publishers[publ - 1].getTextbooks();
-	cout << "size: " << textbooks.size() << endl;
-	cout << "Which textbook you want to buy?" << endl;
+	cout << "Which textbook they want to buy?\n" << endl;
 
-	while (book != 0) {
-		cout << "0.Done." << endl;
-		for (i = 0; i < textbooks.size(); ++i) {
-			cout << textbooks[i] << endl;
+	do {
+
+		cout << "\nPlease choose a book: " << endl;
+		for (j = 0; j < textbooks.size(); ++j) {
+			cout << j + 1 << ". " << textbooks[j] << endl;
 		}
+		cout << "0. Done" << endl;
+		cout << "Choice #: ";
 		cin >> book;
-
-		if (book < 1 || book > textbooks.size()) {
-			cout << "Incorrect textbook number!" << endl;
+		if (book < 0 || book > textbooks.size()) {
+			cout << "Incorrect textbook number!\n" << endl;
+		} else if (book == 0) {
+			break;
 		} else {
 			sum += textbooks[book - 1].getPrice();
 		}
-	}
-	cout << "Total: " << sum << endl;
+	} while (book != 0);
+
+	cout << "Total sum: " << sum << endl;
+
 }
 
-void writeToFile(vector<Publisher>& publishers) {
+void writeToFile(vector<Distributor>& distributors,
+		vector<Textbook>& textbooks) {
 
 	ofstream myfile;
 	myfile.open("example.txt");
-	for (unsigned int var = 0; var < publishers.size(); ++var) {
+	for (unsigned int var = 0; var < distributors.size(); ++var) {
 
-		myfile << publishers[var].getName() << "\t"
-				<< publishers[var].getAddress() << "\t"
-				<< publishers[var].getPhone() << endl;
-		vector<Textbook> temp = publishers[var].getTextbooks();
-
-		for (unsigned int i = 0; i < temp.size(); ++i) {
-			myfile << temp[i].isApproval() << "\t" << temp[i].getTitle() << "\t"
-					<< temp[i].getAuthor() << "\t"
-					<< temp[i].getDateofapproval().getDay() << "\t"
-					<< temp[i].getDateofapproval().getMonth() << "\t"
-					<< temp[i].getDateofapproval().getYear() << "\t"
-					<< temp[i].getEdition() << "\t" << temp[i].getIsbn() << "\t"
-					<< temp[i].getOutOfPrint().getDay() << "\t"
-					<< temp[i].getOutOfPrint().getMonth() << "\t"
-					<< temp[i].getOutOfPrint().getYear() << "\t"
-					<< temp[i].getIssue() << "\t" << temp[i].getPrice() << endl;
-		}
+		myfile << distributors[var].getName() << "\t"
+				<< distributors[var].getAddress() << "\t"
+				<< distributors[var].getPhone() << endl;
 	}
+	for (unsigned int i = 0; i < textbooks.size(); ++i) {
+		myfile << textbooks[i].isApproval() << "\t" << textbooks[i].getTitle()
+				<< "\t" << textbooks[i].getAuthor() << "\t"
+				<< textbooks[i].getDateofapproval().getDay() << "\t"
+				<< textbooks[i].getDateofapproval().getMonth() << "\t"
+				<< textbooks[i].getDateofapproval().getYear() << "\t"
+				<< textbooks[i].getEdition() << "\t" << textbooks[i].getIsbn()
+				<< "\t" << textbooks[i].getOutOfPrint().getDay() << "\t"
+				<< textbooks[i].getOutOfPrint().getMonth() << "\t"
+				<< textbooks[i].getOutOfPrint().getYear() << "\t"
+				<< textbooks[i].getIssue() << "\t" << textbooks[i].getPrice()
+				<< endl;
+	}
+
 	myfile.close();
 }
 
-void readFromFile(vector<Publisher>& publishers) {
+void readFromFile(vector<Distributor>& distributors,
+		vector<Textbook>& textbooks) {
 
 	ifstream infile;
 	string line;
 	infile.open("example1.txt");
-	publishers.clear();
+	distributors.clear();
+	textbooks.clear();
 	vector<string> tokens;
-	vector<Textbook> textbooks;
 	while (getline(infile, line)) {
 		split(line, "\t", tokens);
 		if (tokens.size() == 3) {
-
-			cout << "TOKENS SIZE 3" << endl;
-			Publisher publisher(tokens[0], tokens[1], tokens[2]);
-			publishers.push_back(publisher);
-			textbooks.clear();
+			Distributor distributor(tokens[0], tokens[1], tokens[2]);
+			distributors.push_back(distributor);
 
 		} else if (tokens.size() == 13) {
-			cout << "TOKENS SIZE 13" << endl;
 			Textbook textbook(stoi(tokens[0]), tokens[1], tokens[2],
 					stoi(tokens[3]), stoi(tokens[4]), stoi(tokens[5]),
 					stoi(tokens[6]), tokens[7], stoi(tokens[8]),
 					stoi(tokens[9]), stoi(tokens[10]), stoi(tokens[11]),
 					stof(tokens[12]));
 			textbooks.push_back(textbook);
-			cout << "ASSIGN TO PUBLISHEN NUM: "
-					<< publishers[publishers.size() - 1] << endl;
-			publishers[publishers.size() - 1].setTextbooks(textbooks);
 		}
 		tokens.clear();
 	}
 	infile.close();
-	cout << "PUBLISHER 0: " << publishers[0].getTextbooks().size() << endl;
 }
 
 int main() {
 
 	vector<Textbook> textbooks;
-	Textbook textbook(true, "Math", "Stefan", 16, 01, 1996, 1,
-			"blabla::blabla", 17, 02, 2000, 2, 10.00);
-	Textbook textbook2(true, "Math2", "Stefan", 16, 01, 1996, 1,
-			"blabla::blabla", 17, 02, 2000, 2, 12.00);
-	Textbook textbook3(true, "Math3", "Stefan", 16, 01, 1996, 1,
-			"blabla::blabla", 17, 02, 2000, 2, 15.00);
-	Textbook textbook4(true, "Math4", "Stefan", 16, 01, 1996, 1,
-			"blabla::blabla", 17, 02, 2000, 2, 20.00);
-	Textbook textbook5(true, "Math5", "Stefan", 16, 01, 1996, 1,
-			"blabla::blabla", 17, 02, 2000, 2, 25.00);
+	vector<Distributor> distributors;
+
+	Textbook textbook(true, "Integrated Math I", "Ivan Ivanov", 16, 01, 1996, 1,
+			"ISBN 123456789", 17, 02, 1997, 2, 10.00);
+	Textbook textbook2(true, "Integrated Math II", "Petur Petrov", 10, 03, 2000,
+			2, "ISBN 123456788", 15, 02, 2001, 2, 12.00);
+	Textbook textbook3(true, "Advanced English", "Georgi Georgiev", 22, 07,
+			2001, 1, "ISBN 123456787", 23, 07, 2001, 2, 15.00);
+	Textbook textbook4(true, "Geography", "Stefan Stefanov", 29, 12, 1998, 3,
+			"ISBN 123456786", 01, 02, 1999, 2, 20.00);
+	Textbook textbook5(true, "Bulgarian History", "Dimitur Dimitrov", 02, 11,
+			1995, 1, "ISBN 123456785", 15, 04, 1997, 2, 25.00);
 	textbooks.push_back(textbook);
 	textbooks.push_back(textbook2);
 	textbooks.push_back(textbook3);
 	textbooks.push_back(textbook4);
 	textbooks.push_back(textbook5);
 
-	vector<Publisher> publishers;
-
-	Publisher publisher("Stefan", "Raina Knyagina", "0887869634");
-	publisher.setTextbooks(textbooks);
-	Publisher publisher2("Stefan2", "Raina Knyagina", "0887869634");
-	Publisher publisher3("Stefan3", "Raina Knyagina", "0887869634");
-	Publisher publisher4("Stefan4", "Raina Knyagina", "0887869634");
-	Publisher publisher5("Stefan5", "Raina Knyagina", "0887869634");
-	publishers.push_back(publisher);
-	publishers.push_back(publisher2);
-	publishers.push_back(publisher3);
-	publishers.push_back(publisher4);
-	publishers.push_back(publisher5);
+	Distributor distributor("TextBookS", "Opalchenska Street", "0876123456");
+	Distributor distributor2("Booktraders", "Mladost 1", "0887823498");
+	Distributor distributor3("Bookie", "Vitosha Blvd", "0889121214");
+	Distributor distributor4("Books for all", "St Kliment Ohridski Street",
+			"0887869675");
+	Distributor distributor5("BKS", "Rayna Knyaginya Street", "0887865534");
+	distributors.push_back(distributor);
+	distributors.push_back(distributor2);
+	distributors.push_back(distributor3);
+	distributors.push_back(distributor4);
+	distributors.push_back(distributor5);
 
 	int choice;
 
 	do {
-		cout << "Main Menu\n";
+		cout << "\nMain Menu\n";
 		cout << "Please make your selection\n";
 		cout << "1 - Add a textbook\n";
 		cout << "2 - Add a publisher\n";
@@ -622,25 +590,25 @@ int main() {
 
 		switch (choice) {
 		case 1:
-			addTextbook(publishers);
+			addTextbook(textbooks);
 			break;
 		case 2:
-			addPublisher(publishers);
+			addDistributor(distributors);
 			break;
 		case 3:
-			buy(publishers);
+			buy(distributors, textbooks);
 			break;
 		case 4:
-			writeToFile(publishers);
+			writeToFile(distributors, textbooks);
 			break;
 		case 5:
-			readFromFile(publishers);
+			readFromFile(distributors, textbooks);
 			break;
 		case 6:
-			cout << "Goodbye!";
+			cout << "Goodbye!\n";
 			break;
 		default:
-			cout << "Main Menu\n";
+			cout << "\nMain Menu\n";
 			cout << "Please make your selection\n";
 			cout << "1 - Add a textbook\n";
 			cout << "2 - Add a publisher\n";
